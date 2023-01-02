@@ -85,7 +85,17 @@ zones:
         syncOptions:
           - Validate=false
           - CreateNamespace=true
-      
+      nginx:
+        namespace: nginx
+        valuesFiles:
+          - values.yaml
+        autosync: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+          - PrunePropagationPolicy=foreground
+        chart: nginx
+        chartVersion: '*'
       vault-operator:
         namespace: vault
         valuesFiles:
