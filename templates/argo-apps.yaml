@@ -1,0 +1,56 @@
+{{- range $zone, $config := .Values.zones }}
+{{- range $cluster, $clusterConfig := $config.clusters }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ default $cluster $clusterConfig.name }}-{{ default $zone $config.alias }}
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    env: {{ $zone }}
+spec:
+  project: {{ $zone }}
+  source:
+  {{- if $clusterConfig.gitRepo }}
+    repoURL: {{ $clusterConfig.gitRepo }}
+    targetRevision: HEAD
+    path: {{ or $clusterConfig.path "." }}
+ {{- else if $clusterConfig.chartMuseumRepo }}
+    repoURL: {{ $clusterConfig.chartMuseumRepo | quote }}
+    targetRevision: {{ $clusterConfig.chartVersion | quote }}
+    chart: {{ $clusterConfig.chart }}
+ {{- else }}
+    repoURL: {{ $config.chartMuseumRepo }}
+    targetRevision: {{ $clusterConfig.chartVersion | quote }}
+    chart: {{ $clusterConfig.chart }}
+    {{- end }}
+    helm:
+    {{- if not $clusterConfig.gitRepo }}
+      releaseName: {{ default $cluster $clusterConfig.name }}
+    {{- end }}
+      valueFiles:
+{{- range $file := $clusterConfig.valuesFiles }}
+      - {{ $file }}
+  {{- end }}
+  {{- if $clusterConfig.ignoreDifferences }}
+  ignoreDifferences:
+  {{- toYaml $clusterConfig.ignoreDifferences | nindent 4 }}
+    {{- end }}
+  destination:
+    server: {{ $config.endpoint }}
+    namespace: {{ default $cluster $clusterConfig.namespace }}
+  {{- if or (or $config.autosync $clusterConfig.autosync) $clusterConfig.syncOptions }}
+  syncPolicy:
+  {{- if or $config.autosync $clusterConfig.autosync }}
+    automated:
+      prune: true
+  {{- end }}
+  {{- if $clusterConfig.syncOptions }}
+    syncOptions:
+  {{- toYaml $clusterConfig.syncOptions | nindent 6 }}
+  {{- end }}
+  {{- end }}
+---
+{{- end }}
+{{- end }}

@@ -1,0 +1,138 @@
+zones:
+  local-env:
+    alias: local
+    endpoint: https://kubernetes.default.svc
+    chartMuseumRepo: http://chartmuseum.chartmuseum.svc:8080
+    description: A zone for all the local apps
+    clusters:
+      kube-prometheus-stack:
+        namespace: prometheus
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: kube-prometheus-stack
+        chartVersion: '*'
+      istio-base:
+        namespace: istio-system
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: base
+        chartVersion: '*'
+      cert-manager:
+        namespace: cert-manager
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: cert-manager
+        chartVersion: '*'
+      kong:
+        namespace: kong
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: kong
+        chartVersion: '*'
+      istiod:
+        namespace: istio-system
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: istiod
+        chartVersion: '*'
+      istio-gateway:
+        namespace: ingressgateway
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: gateway
+        chartVersion: '*'
+      kiali-operator:
+        namespace: kiali-operator
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: kiali-operator
+        chartVersion: '*'
+      guestbook:
+        namespace: apps
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        gitRepo: https://github.com/argoproj/argocd-example-apps.git
+        path: helm-guestbook
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+      nginx:
+        namespace: nginx
+        valuesFiles:
+          - values.yaml
+        autosync: true
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+          - PrunePropagationPolicy=foreground
+        chart: nginx
+        chartVersion: '*'
+      vault-operator:
+        namespace: vault
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: vault-operator
+        chartVersion: '*'
+      vault:
+        namespace: vault
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: vault
+        chartVersion: '*'
+      dex:
+        namespace: auth
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: dex
+        chartVersion: '*'
+      vault-secrets-webhook:
+        namespace: vault
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: vault-secrets-webhook
+        chartVersion: '*'
