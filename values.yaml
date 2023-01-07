@@ -126,6 +126,16 @@ zones:
           - CreateNamespace=true
         chart: dex
         chartVersion: '*'
+      keycloak:
+        namespace: auth
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: keycloak
+        chartVersion: '*'
       vault-secrets-webhook:
         namespace: vault
         valuesFiles:
