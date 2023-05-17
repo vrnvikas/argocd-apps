@@ -146,3 +146,13 @@ zones:
           - CreateNamespace=true
         chart: vault-secrets-webhook
         chartVersion: '*'
+      argo-rollouts:
+        namespace: argo-rollouts
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: argo-rollouts
+        chartVersion: '*'
