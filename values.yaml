@@ -156,3 +156,13 @@ zones:
           - CreateNamespace=true
         chart: argo-rollouts
         chartVersion: '*'
+      demo-color-app:
+        namespace: default
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: demo-color-app
+        chartVersion: '*'
