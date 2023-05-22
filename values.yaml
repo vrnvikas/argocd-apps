@@ -167,7 +167,7 @@ zones:
         chart: demo-color-app
         chartVersion: '*'
       grafana:
-        namespace: default
+        namespace: grafana
         valuesFiles:
           - values.yaml
         autosync: false
