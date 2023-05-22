@@ -166,3 +166,13 @@ zones:
           - CreateNamespace=true
         chart: demo-color-app
         chartVersion: '*'
+      grafana:
+        namespace: default
+        valuesFiles:
+          - values.yaml
+        autosync: false
+        syncOptions:
+          - Validate=false
+          - CreateNamespace=true
+        chart: grafana
+        chartVersion: '*'
